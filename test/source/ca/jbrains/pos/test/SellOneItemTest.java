@@ -8,25 +8,11 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 public class SellOneItemTest {
-
-	private static class Barcode {
-		private final String code;
-		
-		Barcode(String code) {
-			this.code = code;
-		}
-		
-		public String getCode() {
-			return code;
-		}
-	}
-	
 	public static class Catalog {
-
-		private final Map<Barcode, String> catalogAsMap;
+		private final Map<String, String> catalogAsMap;
 
 		public Catalog() {
-			this.catalogAsMap = new HashMap<Barcode, String>();
+			this.catalogAsMap = new HashMap<String, String>();
 		}
 
 		boolean priceExists(String code) {
@@ -38,13 +24,12 @@ public class SellOneItemTest {
 		}
 
 		void add(String code, String price) {
-			catalogAsMap.put(new Barcode(code), price);
+			catalogAsMap.put(code, price);
 		}
 
 	}
 
 	static class PointOfSale {
-
 		private final Screen screen;
 
 		private final Catalog catalog;
