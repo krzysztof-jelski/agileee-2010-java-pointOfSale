@@ -8,35 +8,50 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+
 public class SellOneItemTest {
+
+	public static class Catalog {
+
+		private final Map<String, String> catalogAsMap;
+
+		public Catalog() {
+			this.catalogAsMap = new HashMap<String, String>();
+		}
+
+		boolean priceExists(String code) {
+			return catalogAsMap.containsKey(code);
+		}
+
+		String getPrice(String code) {
+			return catalogAsMap.get(code);
+		}
+
+		void add(String code, String price) {
+			catalogAsMap.put(code, price);
+		}
+
+	}
 
 	static class PointOfSale {
 
 		private final Screen screen;
 
-		private final Map<String, String> catalog;
+		private final Catalog catalog;
 
-		public PointOfSale(Screen screen, Map<String, String> catalog) {
+		public PointOfSale(Screen screen, Catalog catalog) {
 			this.screen = screen;
 			this.catalog = catalog;
 		}
 
 		public void onBarcode(String code) {
-			if (priceExists(code)) {
-				screen.displayPrice(getPrice(code));				
+			if (catalog.priceExists(code)) {
+				screen.displayPrice(catalog.getPrice(code));				
 			} else if (code.isEmpty()) {
 				screen.displayScannedEmptyBarcode();
 			} else {
 				screen.displayNoProductFound(code);
 			}
-		}
-
-		private boolean priceExists(String code) {
-			return catalog.containsKey(code);
-		}
-
-		private String getPrice(String code) {
-			return catalog.get(code);
 		}
 	}
 
@@ -64,16 +79,16 @@ public class SellOneItemTest {
 		}
 	}
 
-	private final Map<String, String> catalog = new HashMap<String, String>();
-	
 	private Screen screen = new Screen();
+
+	private Catalog catalog = new Catalog();
 	
-	private PointOfSale pointOfSale = new PointOfSale(screen, catalog);
+	private PointOfSale pointOfSale = new PointOfSale(screen, catalog );
 	
 	@Before
 	public void setUp() {
-		catalog.put("firstBarCode", "$123.50");
-		catalog.put("anotherBarCode", "$256.50");
+		catalog.add("firstBarCode", "$123.50");
+		catalog.add("anotherBarCode", "$256.50");
 	}
 
 	@Test
