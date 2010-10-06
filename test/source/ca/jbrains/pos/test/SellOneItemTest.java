@@ -9,7 +9,9 @@ import org.junit.Test;
 
 public class SellOneItemTest {
 	
+
 	private static class PointOfSale {
+		private static final String NO_PRODUCT_FOUND_MESSAGE = "no product found for barcode: %s";
 		private final Screen screen;
 
 		private Map<String, String> storage = new HashMap<String, String>();
@@ -24,7 +26,17 @@ public class SellOneItemTest {
 		}
 
 		public void onBarcode(String code) {
-			screen.display(storage.get(code));
+			if (storage.containsKey(code)) {
+				screen.display(storage.get(code));				
+			} else if (code.isEmpty()) {
+				screen.display("scanned empty barcode");
+			} else {
+				screen.display(noProductFoundMessage(code));
+			}
+		}
+
+		private String noProductFoundMessage(String code) {
+			return String.format(NO_PRODUCT_FOUND_MESSAGE, code);
 		}
 	}
 
@@ -58,5 +70,16 @@ public class SellOneItemTest {
 		String price = screen.getText();
 		Assert.assertEquals("$256.50", price);
 	}
+	
+	@Test
+	public void noProductFound() throws Exception {
+		pointOfSale.onBarcode("unknown barCode");
+		Assert.assertEquals("no product found for barcode: unknown barCode", screen.getText());
+	}
 
+	@Test
+	public void emptyBarcodeReceived() throws Exception {
+		pointOfSale.onBarcode("");
+		Assert.assertEquals("scanned empty barcode", screen.getText());
+	}
 }
