@@ -5,33 +5,38 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class SellOneItemTest {
-	
 
 	static class PointOfSale {
+
 		private final Screen screen;
 
-		private Map<String, String> storage = new HashMap<String, String>();
+		private final Map<String, String> catalog;
 
-		{
-			storage.put("firstBarCode", "$123.50");
-			storage.put("anotherBarCode", "$256.50");
-		}
-
-		public PointOfSale(Screen screen) {
+		public PointOfSale(Screen screen, Map<String, String> catalog) {
 			this.screen = screen;
+			this.catalog = catalog;
 		}
 
 		public void onBarcode(String code) {
-			if (storage.containsKey(code)) {
-				screen.displayPrice(storage.get(code));				
+			if (priceExists(code)) {
+				screen.displayPrice(getPrice(code));				
 			} else if (code.isEmpty()) {
 				screen.displayScannedEmptyBarcode();
 			} else {
 				screen.displayNoProductFound(code);
 			}
+		}
+
+		private boolean priceExists(String code) {
+			return catalog.containsKey(code);
+		}
+
+		private String getPrice(String code) {
+			return catalog.get(code);
 		}
 	}
 
@@ -59,8 +64,17 @@ public class SellOneItemTest {
 		}
 	}
 
+	private final Map<String, String> catalog = new HashMap<String, String>();
+	
 	private Screen screen = new Screen();
-	private PointOfSale pointOfSale = new PointOfSale(screen);
+	
+	private PointOfSale pointOfSale = new PointOfSale(screen, catalog);
+	
+	@Before
+	public void setUp() {
+		catalog.put("firstBarCode", "$123.50");
+		catalog.put("anotherBarCode", "$256.50");
+	}
 
 	@Test
 	public void productFound() throws Exception {
