@@ -5,18 +5,28 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
-
 
 public class SellOneItemTest {
 
+	private static class Barcode {
+		private final String code;
+		
+		Barcode(String code) {
+			this.code = code;
+		}
+		
+		public String getCode() {
+			return code;
+		}
+	}
+	
 	public static class Catalog {
 
-		private final Map<String, String> catalogAsMap;
+		private final Map<Barcode, String> catalogAsMap;
 
 		public Catalog() {
-			this.catalogAsMap = new HashMap<String, String>();
+			this.catalogAsMap = new HashMap<Barcode, String>();
 		}
 
 		boolean priceExists(String code) {
@@ -28,7 +38,7 @@ public class SellOneItemTest {
 		}
 
 		void add(String code, String price) {
-			catalogAsMap.put(code, price);
+			catalogAsMap.put(new Barcode(code), price);
 		}
 
 	}
@@ -46,7 +56,7 @@ public class SellOneItemTest {
 
 		public void onBarcode(String code) {
 			if (catalog.priceExists(code)) {
-				screen.displayPrice(catalog.getPrice(code));				
+				screen.displayPrice(catalog.getPrice(code));
 			} else if (code.isEmpty()) {
 				screen.displayScannedEmptyBarcode();
 			} else {
@@ -82,40 +92,39 @@ public class SellOneItemTest {
 	private Screen screen = new Screen();
 
 	private Catalog catalog = new Catalog();
-	
-	private PointOfSale pointOfSale = new PointOfSale(screen, catalog );
-	
-	@Before
-	public void setUp() {
-		catalog.add("firstBarCode", "$123.50");
-		catalog.add("anotherBarCode", "$256.50");
-	}
+
+	private PointOfSale pointOfSale = new PointOfSale(screen, catalog);
 
 	@Test
 	public void productFound() throws Exception {
+		catalog.add("firstBarCode", "$123.50");
+
 		pointOfSale.onBarcode("firstBarCode");
-		
+
 		Assert.assertEquals("$123.50", screen.getText());
 	}
 
 	@Test
 	public void productFoundForAnotherBarcode() throws Exception {
+		catalog.add("anotherBarCode", "$256.50");
+
 		pointOfSale.onBarcode("anotherBarCode");
-		
+
 		Assert.assertEquals("$256.50", screen.getText());
 	}
-	
+
 	@Test
 	public void noProductFound() throws Exception {
 		pointOfSale.onBarcode("unknown barCode");
-		
-		Assert.assertEquals("no product found for barcode: unknown barCode", screen.getText());
+
+		Assert.assertEquals("no product found for barcode: unknown barCode",
+				screen.getText());
 	}
 
 	@Test
 	public void emptyBarcodeReceived() throws Exception {
 		pointOfSale.onBarcode("");
-		
+
 		Assert.assertEquals("scanned empty barcode", screen.getText());
 	}
 }
