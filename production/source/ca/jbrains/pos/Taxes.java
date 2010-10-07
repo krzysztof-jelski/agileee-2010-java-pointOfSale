@@ -18,4 +18,8 @@ public class Taxes {
 		return price / 100 * gst;
 	}
 
+	public int pstTax(int price) {
+		return price / 100 * pst;
+	}
+
 }

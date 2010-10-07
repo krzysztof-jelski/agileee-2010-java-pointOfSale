@@ -39,7 +39,7 @@ public class Catalog {
 	}
 
 	public void add(String code, int price, boolean pstExempt) {
-		add(code, price);
+		itemsByCode.put(code, new CatalogItem(price, pstExempt));
 	}
 
 }
