@@ -4,23 +4,22 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
-import ca.jbrains.pos.Catalog;
 import ca.jbrains.pos.Display;
+import ca.jbrains.pos.EmptyBarcodeSaleResult;
 import ca.jbrains.pos.PointOfSale;
-import ca.jbrains.pos.SaleResult;
 import ca.jbrains.pos.SaleTerminalListener;
+import ca.jbrains.pos.SuccessfulSaleResult;
+import ca.jbrains.pos.UnknownBarcodeSaleResult;
 
 public class SellOneItemTest {
+
+	private PointOfSale pointOfSale = mock(PointOfSale.class);
+
 	private Display display = mock(Display.class);
-
-	private Catalog catalog = new Catalog();
-
-	private SaleTerminalListener saleTerminalListener = saleTerminalListenerWith(catalog);
 
 	@Test
 	public void productFound() throws Exception {
-		PointOfSale pointOfSale = mock(PointOfSale.class);
-		when(pointOfSale.tryToSell("firstBarCode")).thenReturn(new SaleResult(12350));
+		when(pointOfSale.tryToSell("firstBarCode")).thenReturn(new SuccessfulSaleResult(12350));
 		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, null, pointOfSale);
 
 		saleTerminalListener.onBarcode("firstBarCode");
@@ -29,17 +28,9 @@ public class SellOneItemTest {
 	}
 
 	@Test
-	public void productFoundForAnotherBarcode() throws Exception {
-		SaleTerminalListener saleTerminalListener = saleTerminalListenerWith(Catalog.with("anotherBarCode", 25650));
-
-		saleTerminalListener.onBarcode("anotherBarCode");
-
-		verify(display).displayPrice(25650);
-	}
-
-	@Test
 	public void noProductFound() throws Exception {
-		SaleTerminalListener saleTerminalListener = saleTerminalListenerWith(createCatalogWithout("unknown barCode"));
+		when(pointOfSale.tryToSell("unknown barCode")).thenReturn(new UnknownBarcodeSaleResult("unknown barCode"));
+		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, null, pointOfSale);
 
 		saleTerminalListener.onBarcode("unknown barCode");
 
@@ -48,18 +39,11 @@ public class SellOneItemTest {
 
 	@Test
 	public void emptyBarcodeReceived() throws Exception {
+		when(pointOfSale.tryToSell("")).thenReturn(new EmptyBarcodeSaleResult());
+		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, null, pointOfSale);
 		saleTerminalListener.onBarcode("");
 
 		verify(display).displayScannedEmptyBarcode();
-	}
-
-	private Catalog createCatalogWithout(@SuppressWarnings("unused") String barcode) {
-		return new Catalog();
-	}
-
-	private SaleTerminalListener saleTerminalListenerWith(Catalog catalog) {
-		PointOfSale pointOfSale = mock(PointOfSale.class);
-		return new SaleTerminalListener(display, catalog, null);
 	}
 
 }

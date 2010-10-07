@@ -16,8 +16,7 @@ public class SaleTerminalListener {
 	public void onBarcode(String code) {
 		boolean useNewAlgorithm = pointOfSale != null;
 		if (useNewAlgorithm) {
-			SaleResult sale = pointOfSale.tryToSell(code);
-			display.displayPrice(sale.price);
+			pointOfSale.tryToSell(code).renderOn(display);
 		} else {
 			if (catalog.priceExists(code)) {
 				display.displayPrice(catalog.findCostFor(code));
