@@ -8,13 +8,12 @@ public class Catalog {
 	private Taxes taxes;
 
 	public Catalog() {
-		this.itemsByCode = new HashMap<String, CatalogItem>();
-		this.taxes = new Taxes();
+		this(Taxes.withGstAndPst(0, 0));
 	}
 
 	public Catalog(Taxes taxes) {
-		this();
 		this.taxes = taxes;
+		this.itemsByCode = new HashMap<String, CatalogItem>();
 	}
 
 	public boolean priceExists(String code) {

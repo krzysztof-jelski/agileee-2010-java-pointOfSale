@@ -12,7 +12,7 @@ public class CatalogTest {
 	@Test
 	public void findCostWithTaxes() {
 		// given
-		Catalog catalog = new Catalog(new Taxes().withGst(5).withPst(10));
+		Catalog catalog = new Catalog(Taxes.withGstAndPst(5, 10));
 		catalog.add("123", 100, true);
 
 		// when

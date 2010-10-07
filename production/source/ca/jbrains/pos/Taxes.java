@@ -2,17 +2,20 @@ package ca.jbrains.pos;
 
 public class Taxes {
 
-	public int gst;
-	private int pst;
+	public final int gst;
+	public final int pst;
 
-	public Taxes withGst(int gst) {
+	private Taxes(int gst, int pst) {
 		this.gst = gst;
-		return this;
+		this.pst = pst;
 	}
 
-	public Taxes withPst(int pst) {
-		this.pst = pst;
-		return this;
+	public static Taxes withGstAndPst(int gst, int pst) {
+		return new Taxes(gst, pst);
+	}
+
+	int gstTax(int price) {
+		return price / 100 * gst;
 	}
 
 }

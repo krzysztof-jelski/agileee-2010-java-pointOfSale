@@ -49,7 +49,7 @@ public class SellOneItemTest {
 		verify(screen).displayScannedEmptyBarcode();
 	}
 
-	private Catalog createCatalogWithout(String barcode) {
+	private Catalog createCatalogWithout(@SuppressWarnings("unused") String barcode) {
 		return new Catalog();
 	}
 }

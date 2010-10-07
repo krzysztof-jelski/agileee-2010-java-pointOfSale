@@ -9,7 +9,7 @@ public class CatalogItem {
 	}
 
 	public int cost(Taxes taxes) {
-		return price + price / 100 * taxes.gst;
+		return price + taxes.gstTax(price);
 	}
 
 }
