@@ -17,7 +17,7 @@ public class SellOneItemTest {
 
 	@Test
 	public void productFound() throws Exception {
-		catalog.add("firstBarCode", "$123.50");
+		PointOfSale pointOfSale = new PointOfSale(screen, createCatalogWith("firstBarCode", "$123.50"));
 
 		pointOfSale.onBarcode("firstBarCode");
 
@@ -26,7 +26,7 @@ public class SellOneItemTest {
 
 	@Test
 	public void productFoundForAnotherBarcode() throws Exception {
-		catalog.add("anotherBarCode", "$256.50");
+		PointOfSale pointOfSale = new PointOfSale(screen, createCatalogWith("anotherBarCode", "$256.50"));
 
 		pointOfSale.onBarcode("anotherBarCode");
 
@@ -35,6 +35,8 @@ public class SellOneItemTest {
 
 	@Test
 	public void noProductFound() throws Exception {
+		PointOfSale pointOfSale = new PointOfSale(screen, createCatalogWithout("unknown barCode"));
+
 		pointOfSale.onBarcode("unknown barCode");
 
 		verify(screen).displayNoProductFound("unknown barCode");
@@ -45,5 +47,15 @@ public class SellOneItemTest {
 		pointOfSale.onBarcode("");
 
 		verify(screen).displayScannedEmptyBarcode();
+	}
+
+	private Catalog createCatalogWith(String code, String priceAsString) {
+		Catalog catalog = new Catalog();
+		catalog.add(code, priceAsString);
+		return catalog;
+	}
+
+	private Catalog createCatalogWithout(String barcode) {
+		return new Catalog();
 	}
 }
