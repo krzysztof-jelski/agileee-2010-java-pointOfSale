@@ -7,6 +7,7 @@ import org.junit.Test;
 import ca.jbrains.pos.Display;
 import ca.jbrains.pos.EmptyBarcodeSaleResult;
 import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.SaleResult;
 import ca.jbrains.pos.SaleTerminalListener;
 import ca.jbrains.pos.SuccessfulSaleResult;
 import ca.jbrains.pos.UnknownBarcodeSaleResult;
@@ -18,9 +19,20 @@ public class SellOneItemTest {
 	private Display display = mock(Display.class);
 
 	@Test
+	public void renderResponse() {
+		SaleResult saleResult = mock(SaleResult.class);
+		when(pointOfSale.tryToSell("123")).thenReturn(saleResult);
+		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
+
+		saleTerminalListener.onBarcode("123");
+
+		verify(saleResult).renderOn(display);
+	}
+
+	@Test
 	public void productFound() throws Exception {
 		when(pointOfSale.tryToSell("firstBarCode")).thenReturn(new SuccessfulSaleResult(12350));
-		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, null, pointOfSale);
+		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
 
 		saleTerminalListener.onBarcode("firstBarCode");
 
@@ -30,7 +42,7 @@ public class SellOneItemTest {
 	@Test
 	public void noProductFound() throws Exception {
 		when(pointOfSale.tryToSell("unknown barCode")).thenReturn(new UnknownBarcodeSaleResult("unknown barCode"));
-		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, null, pointOfSale);
+		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
 
 		saleTerminalListener.onBarcode("unknown barCode");
 
@@ -40,7 +52,7 @@ public class SellOneItemTest {
 	@Test
 	public void emptyBarcodeReceived() throws Exception {
 		when(pointOfSale.tryToSell("")).thenReturn(new EmptyBarcodeSaleResult());
-		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, null, pointOfSale);
+		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
 		saleTerminalListener.onBarcode("");
 
 		verify(display).displayScannedEmptyBarcode();

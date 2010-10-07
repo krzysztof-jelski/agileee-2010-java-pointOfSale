@@ -16,7 +16,7 @@ public class Catalog {
 		this.itemsByCode = new HashMap<String, CatalogItem>();
 	}
 
-	public boolean priceExists(String code) {
+	public boolean contains(String code) {
 		return itemsByCode.containsKey(code);
 	}
 
