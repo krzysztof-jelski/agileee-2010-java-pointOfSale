@@ -1,6 +1,8 @@
 package ca.jbrains.pos;
 
 import java.io.PrintStream;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class Screen {
 
@@ -24,5 +26,10 @@ public class Screen {
 
 	public void displayPrice(String price) {
 		display(price);
+	}
+
+	public void displayPrice(int price) {
+		display(NumberFormat.getCurrencyInstance(Locale.US).format(((double) price / 100)));
+
 	}
 }

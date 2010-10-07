@@ -17,20 +17,20 @@ public class SellOneItemTest {
 
 	@Test
 	public void productFound() throws Exception {
-		PointOfSale pointOfSale = new PointOfSale(screen, Catalog.with("firstBarCode", "$123.50"));
+		PointOfSale pointOfSale = new PointOfSale(screen, Catalog.with("firstBarCode", 12350));
 
 		pointOfSale.onBarcode("firstBarCode");
 
-		verify(screen).displayPrice("$123.50");
+		verify(screen).displayPrice(12350);
 	}
 
 	@Test
 	public void productFoundForAnotherBarcode() throws Exception {
-		PointOfSale pointOfSale = new PointOfSale(screen, Catalog.with("anotherBarCode", "$256.50"));
+		PointOfSale pointOfSale = new PointOfSale(screen, Catalog.with("anotherBarCode", 25650));
 
 		pointOfSale.onBarcode("anotherBarCode");
 
-		verify(screen).displayPrice("$256.50");
+		verify(screen).displayPrice(25650);
 	}
 
 	@Test

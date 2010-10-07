@@ -35,10 +35,19 @@ public class ScreenTest {
 	}
 
 	@Test
-	public void displayPrice() {
+	public void displayPriceAsString() {
 		Screen screen = createScreen();
 
 		screen.displayPrice("$125.50");
+
+		verify(printStream).println("$125.50");
+	}
+
+	@Test
+	public void displayPrice() {
+		Screen screen = createScreen();
+
+		screen.displayPrice(12550);
 
 		verify(printStream).println("$125.50");
 	}
