@@ -8,8 +8,8 @@ public class CatalogItem {
 		this.price = price;
 	}
 
-	public int cost() {
-		return price;
+	public int cost(Taxes taxes) {
+		return price + price / 100 * taxes.gst;
 	}
 
 }

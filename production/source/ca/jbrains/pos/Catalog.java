@@ -5,16 +5,23 @@ import java.util.Map;
 
 public class Catalog {
 	private Map<String, CatalogItem> itemsByCode;
+	private Taxes taxes;
 
 	public Catalog() {
 		this.itemsByCode = new HashMap<String, CatalogItem>();
+		this.taxes = new Taxes();
+	}
+
+	public Catalog(Taxes taxes) {
+		this();
+		this.taxes = taxes;
 	}
 
 	public boolean priceExists(String code) {
 		return itemsByCode.containsKey(code);
 	}
 
-	public CatalogItem findItem(String code) {
+	private CatalogItem findItem(String code) {
 		return itemsByCode.get(code);
 	}
 
@@ -28,8 +35,12 @@ public class Catalog {
 		itemsByCode.put(code, new CatalogItem(price));
 	}
 
-	int findCostFor(String code) {
-		return findItem(code).cost();
+	public int findCostFor(String code) {
+		return findItem(code).cost(taxes);
+	}
+
+	public void add(String code, int price, boolean pstExempt) {
+		add(code, price);
 	}
 
 }
