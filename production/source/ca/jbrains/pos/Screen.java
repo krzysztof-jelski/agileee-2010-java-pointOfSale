@@ -1,10 +1,17 @@
 package ca.jbrains.pos;
 
+import java.io.PrintStream;
+
 public class Screen {
 
-	// not tested
+	private PrintStream printStream;
+
+	public Screen(PrintStream printStream) {
+		this.printStream = printStream;
+	}
+
 	private void display(String text) {
-		System.out.println(text);
+		printStream.println(text);
 	}
 
 	public void displayScannedEmptyBarcode() {
