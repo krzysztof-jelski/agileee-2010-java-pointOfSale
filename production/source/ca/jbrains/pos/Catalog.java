@@ -28,4 +28,8 @@ public class Catalog {
 		itemsByCode.put(code, new CatalogItem(price));
 	}
 
+	int findCostFor(String code) {
+		return findItem(code).cost();
+	}
+
 }

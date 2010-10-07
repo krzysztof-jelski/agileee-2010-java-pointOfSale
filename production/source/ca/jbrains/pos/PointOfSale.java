@@ -12,15 +12,11 @@ public class PointOfSale {
 
 	public void onBarcode(String code) {
 		if (catalog.priceExists(code)) {
-			screen.displayPrice(findCostFor(code));
+			screen.displayPrice(catalog.findCostFor(code));
 		} else if (code.isEmpty()) {
 			screen.displayScannedEmptyBarcode();
 		} else {
 			screen.displayNoProductFound(code);
 		}
-	}
-
-	private int findCostFor(String code) {
-		return catalog.findItem(code).cost();
 	}
 }
