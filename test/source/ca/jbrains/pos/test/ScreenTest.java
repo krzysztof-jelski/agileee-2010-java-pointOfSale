@@ -14,7 +14,7 @@ import ca.jbrains.pos.Screen;
 @RunWith(MockitoJUnitRunner.class)
 public class ScreenTest {
 	@Mock
-	PrintStream printStream;
+	private PrintStream printStream;
 
 	@Test
 	public void displayNoProductFound() {
@@ -32,15 +32,6 @@ public class ScreenTest {
 		screen.displayScannedEmptyBarcode();
 
 		verify(printStream).println("scanned empty barcode");
-	}
-
-	@Test
-	public void displayPriceAsString() {
-		Screen screen = createScreen();
-
-		screen.displayPrice("$125.50");
-
-		verify(printStream).println("$125.50");
 	}
 
 	@Test

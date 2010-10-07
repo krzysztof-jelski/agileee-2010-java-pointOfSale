@@ -14,16 +14,6 @@ public class Catalog {
 		return itemsByCode.containsKey(code);
 	}
 
-	private void add(String code, String price) {
-		itemsByCode.put(code, new CatalogItem(price, 0));
-	}
-
-	public static Catalog with(String code, String priceAsString) {
-		Catalog catalog = new Catalog();
-		catalog.add(code, priceAsString);
-		return catalog;
-	}
-
 	public CatalogItem findItem(String code) {
 		return itemsByCode.get(code);
 	}
@@ -35,7 +25,7 @@ public class Catalog {
 	}
 
 	private void add(String code, int price) {
-		itemsByCode.put(code, new CatalogItem("", price));
+		itemsByCode.put(code, new CatalogItem(price));
 	}
 
 }

@@ -24,10 +24,6 @@ public class Screen {
 		display(String.format("no product found for barcode: %s", code));
 	}
 
-	public void displayPrice(String price) {
-		display(price);
-	}
-
 	public void displayPrice(int price) {
 		display(NumberFormat.getCurrencyInstance(Locale.US).format(((double) price / 100)));
 
