@@ -18,8 +18,14 @@ public class Catalog {
 		return catalogAsMap.get(code);
 	}
 
-	public void add(String code, String price) {
+	private void add(String code, String price) {
 		catalogAsMap.put(code, price);
+	}
+
+	public static Catalog with(String code, String priceAsString) {
+		Catalog catalog = new Catalog();
+		catalog.add(code, priceAsString);
+		return catalog;
 	}
 
 }
