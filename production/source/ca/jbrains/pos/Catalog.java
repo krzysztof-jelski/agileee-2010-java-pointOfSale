@@ -35,7 +35,15 @@ public class Catalog {
 	}
 
 	public int findCostFor(String code) {
-		return findItem(code).cost(taxes);
+		CatalogItem item = findItem(code);
+		return addSalesTaxesTo(item);
+	}
+
+	public int addSalesTaxesTo(CatalogItem item) {
+		int result = item.price + taxes.gstTax(item.price);
+		if (!item.pstExempt)
+			result = result + taxes.pstTax(result);
+		return result;
 	}
 
 	public void add(String code, int price, boolean pstExempt) {

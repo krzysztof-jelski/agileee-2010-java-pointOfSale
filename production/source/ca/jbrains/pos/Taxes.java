@@ -26,4 +26,11 @@ public class Taxes {
 		return price / 100 * percent;
 	}
 
+	public int on(CatalogItem catalogItem) {
+		int result = catalogItem.price + gstTax(catalogItem.price);
+		if (!catalogItem.pstExempt)
+			result = result + pstTax(result);
+		return result;
+	}
+
 }
