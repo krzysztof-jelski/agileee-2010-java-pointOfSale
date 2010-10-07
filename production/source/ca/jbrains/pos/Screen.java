@@ -26,6 +26,5 @@ public class Screen {
 
 	public void displayPrice(int price) {
 		display(NumberFormat.getCurrencyInstance(Locale.US).format(((double) price / 100)));
-
 	}
 }

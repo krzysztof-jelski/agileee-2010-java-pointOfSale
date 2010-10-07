@@ -8,4 +8,8 @@ public class CatalogItem {
 		this.price = price;
 	}
 
+	public int cost() {
+		return price;
+	}
+
 }
