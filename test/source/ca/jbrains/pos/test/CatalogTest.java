@@ -13,8 +13,8 @@ public class CatalogTest {
 
 	@Test
 	public void itemFound() {
-		CatalogItem catalogItem = new CatalogItem(100);
-		Catalog catalog = Catalog.with("123", catalogItem);
+		CatalogItem catalogItem = new CatalogItemBuilder().withCode("123").build();
+		Catalog catalog = Catalog.with(catalogItem);
 
 		CatalogItem foundCatalogItem = catalog.findItem("123");
 
@@ -30,8 +30,18 @@ public class CatalogTest {
 
 	@Test
 	public void containItem() {
-		Catalog catalog = Catalog.with("123", 0);
+		Catalog catalog = Catalog.with(new CatalogItemBuilder().withCode("123").build());
 
 		assertTrue("Item should be in catalog", catalog.contains("123"));
+	}
+
+	@Test
+	public void mapCatalogItemByCode() {
+		CatalogItem catalogItem = new CatalogItem("code", 123, true);
+		Catalog catalog = Catalog.with(catalogItem);
+
+		CatalogItem foundItem = catalog.findItem("code");
+
+		assertEquals(catalogItem, foundItem);
 	}
 }

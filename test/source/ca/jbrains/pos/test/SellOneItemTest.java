@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import static ca.jbrains.pos.test.CatalogItemBuilder.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -41,7 +42,7 @@ public class SellOneItemTest {
 
 	@Test
 	public void calculateCostForItemFoundInCatalog() {
-		CatalogItem item = new CatalogItem(0);
+		CatalogItem item = aCatalogItem();
 		when(catalog.contains("barcode")).thenReturn(true);
 		when(catalog.findItem("barcode")).thenReturn(item);
 		when(taxes.on(item)).thenReturn(10000);

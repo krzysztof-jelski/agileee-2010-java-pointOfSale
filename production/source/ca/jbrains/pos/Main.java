@@ -7,7 +7,7 @@ public class Main {
 				new SaleTerminalListener(
 						new Screen(System.out),
 						new PointOfSaleWithCatalog(
-								Catalog.with("123", new CatalogItem(10000, false)),
+								Catalog.with(new CatalogItem("123", 10000, false)),
 								Taxes.withGstAndPst(5, 10)));
 		saleTerminalListener.onBarcode("123");
 		saleTerminalListener.onBarcode("000");

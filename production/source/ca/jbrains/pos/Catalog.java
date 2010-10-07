@@ -18,12 +18,8 @@ public class Catalog {
 		return itemsByCode.get(code);
 	}
 
-	public static Catalog with(String code, int price) {
-		return new Catalog(Collections.singletonMap(code, new CatalogItem(price)));
-	}
-
-	public static Catalog with(String code, CatalogItem catalogItem) {
-		return new Catalog(Collections.singletonMap(code, catalogItem));
+	public static Catalog with(CatalogItem catalogItem) {
+		return new Catalog(Collections.singletonMap(catalogItem.barcode, catalogItem));
 	}
 
 }
