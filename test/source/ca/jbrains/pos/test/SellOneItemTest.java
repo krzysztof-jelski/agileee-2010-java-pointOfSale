@@ -1,61 +1,47 @@
 package ca.jbrains.pos.test;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
-import ca.jbrains.pos.Display;
+import ca.jbrains.pos.Catalog;
 import ca.jbrains.pos.EmptyBarcodeSaleResult;
 import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.PointOfSaleWithCatalog;
 import ca.jbrains.pos.SaleResult;
-import ca.jbrains.pos.SaleTerminalListener;
 import ca.jbrains.pos.SuccessfulSaleResult;
 import ca.jbrains.pos.UnknownBarcodeSaleResult;
 
 public class SellOneItemTest {
-
-	private PointOfSale pointOfSale = mock(PointOfSale.class);
-
-	private Display display = mock(Display.class);
+	private Catalog catalog = mock(Catalog.class);
+	private PointOfSale pointOfSale = new PointOfSaleWithCatalog(catalog);
 
 	@Test
-	public void renderResponse() {
-		SaleResult saleResult = mock(SaleResult.class);
-		when(pointOfSale.tryToSell("123")).thenReturn(saleResult);
-		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
+	public void successfulResultIfProductFoundInCatalog() {
+		when(catalog.findCostFor("barcode")).thenReturn(12300);
+		when(catalog.contains("barcode")).thenReturn(true);
 
-		saleTerminalListener.onBarcode("123");
+		SaleResult saleResult = pointOfSale.tryToSell("barcode");
 
-		verify(saleResult).renderOn(display);
-	}
-
-	@Test
-	public void productFound() throws Exception {
-		when(pointOfSale.tryToSell("firstBarCode")).thenReturn(new SuccessfulSaleResult(12350));
-		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
-
-		saleTerminalListener.onBarcode("firstBarCode");
-
-		verify(display).displayPrice(12350);
+		assertEquals(SuccessfulSaleResult.class, saleResult.getClass());
+		assertEquals(12300, ((SuccessfulSaleResult) saleResult).price);
 	}
 
 	@Test
 	public void noProductFound() throws Exception {
-		when(pointOfSale.tryToSell("unknown barCode")).thenReturn(new UnknownBarcodeSaleResult("unknown barCode"));
-		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
+		when(catalog.contains("unknown barCode")).thenReturn(false);
 
-		saleTerminalListener.onBarcode("unknown barCode");
+		SaleResult saleResult = pointOfSale.tryToSell("unknown barCode");
 
-		verify(display).displayNoProductFound("unknown barCode");
+		assertEquals(UnknownBarcodeSaleResult.class, saleResult.getClass());
+		assertEquals("unknown barCode", ((UnknownBarcodeSaleResult) saleResult).code);
 	}
 
 	@Test
-	public void emptyBarcodeReceived() throws Exception {
-		when(pointOfSale.tryToSell("")).thenReturn(new EmptyBarcodeSaleResult());
-		SaleTerminalListener saleTerminalListener = new SaleTerminalListener(display, pointOfSale);
-		saleTerminalListener.onBarcode("");
+	public void emptyBarcodeScanned() throws Exception {
+		SaleResult saleResult = pointOfSale.tryToSell("");
 
-		verify(display).displayScannedEmptyBarcode();
+		assertEquals(EmptyBarcodeSaleResult.class, saleResult.getClass());
 	}
-
 }
