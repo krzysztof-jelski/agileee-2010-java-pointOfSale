@@ -1,79 +1,14 @@
 package ca.jbrains.pos.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import ca.jbrains.pos.Catalog;
+import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.Screen;
+
 public class SellOneItemTest {
-	public static class Catalog {
-		private final Map<String, String> catalogAsMap;
-
-		public Catalog() {
-			this.catalogAsMap = new HashMap<String, String>();
-		}
-
-		boolean priceExists(String code) {
-			return catalogAsMap.containsKey(code);
-		}
-
-		String getPrice(String code) {
-			return catalogAsMap.get(code);
-		}
-
-		void add(String code, String price) {
-			catalogAsMap.put(code, price);
-		}
-
-	}
-
-	static class PointOfSale {
-		private final Screen screen;
-
-		private final Catalog catalog;
-
-		public PointOfSale(Screen screen, Catalog catalog) {
-			this.screen = screen;
-			this.catalog = catalog;
-		}
-
-		public void onBarcode(String code) {
-			if (catalog.priceExists(code)) {
-				screen.displayPrice(catalog.getPrice(code));
-			} else if (code.isEmpty()) {
-				screen.displayScannedEmptyBarcode();
-			} else {
-				screen.displayNoProductFound(code);
-			}
-		}
-	}
-
-	static class Screen {
-		private String text;
-
-		public String getText() {
-			return text;
-		}
-
-		private void display(String text) {
-			this.text = text;
-		}
-
-		void displayScannedEmptyBarcode() {
-			display("scanned empty barcode");
-		}
-
-		void displayNoProductFound(String code) {
-			display(String.format("no product found for barcode: %s", code));
-		}
-
-		void displayPrice(String price) {
-			display(price);
-		}
-	}
-
 	private Screen screen = new Screen();
 
 	private Catalog catalog = new Catalog();
