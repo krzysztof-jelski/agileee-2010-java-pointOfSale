@@ -1,6 +1,6 @@
 package ca.jbrains.pos.test;
 
-import junit.framework.Assert;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.Screen;
 
 public class SellOneItemTest {
-	private Screen screen = new Screen();
+	private Screen screen = mock(Screen.class);
 
 	private Catalog catalog = new Catalog();
 
@@ -21,7 +21,7 @@ public class SellOneItemTest {
 
 		pointOfSale.onBarcode("firstBarCode");
 
-		Assert.assertEquals("$123.50", screen.getText());
+		verify(screen).displayPrice("$123.50");
 	}
 
 	@Test
@@ -30,21 +30,20 @@ public class SellOneItemTest {
 
 		pointOfSale.onBarcode("anotherBarCode");
 
-		Assert.assertEquals("$256.50", screen.getText());
+		verify(screen).displayPrice("$256.50");
 	}
 
 	@Test
 	public void noProductFound() throws Exception {
 		pointOfSale.onBarcode("unknown barCode");
 
-		Assert.assertEquals("no product found for barcode: unknown barCode",
-				screen.getText());
+		verify(screen).displayNoProductFound("unknown barCode");
 	}
 
 	@Test
 	public void emptyBarcodeReceived() throws Exception {
 		pointOfSale.onBarcode("");
 
-		Assert.assertEquals("scanned empty barcode", screen.getText());
+		verify(screen).displayScannedEmptyBarcode();
 	}
 }
