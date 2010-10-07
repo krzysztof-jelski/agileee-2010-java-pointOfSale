@@ -2,30 +2,36 @@ package ca.jbrains.pos.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Collections;
+
 import org.junit.Test;
 
 import ca.jbrains.pos.Catalog;
-import ca.jbrains.pos.Taxes;
+import ca.jbrains.pos.CatalogItem;
 
 public class CatalogTest {
 
 	@Test
-	public void findCostWithGst() {
-		Catalog catalog = new Catalog(Taxes.withGstAndPst(5, 10));
-		catalog.add("123", 100, true);
+	public void itemFound() {
+		CatalogItem catalogItem = new CatalogItem(100);
+		Catalog catalog = Catalog.with("123", catalogItem);
 
-		int cost = catalog.findCostFor("123");
+		CatalogItem foundCatalogItem = catalog.findItem("123");
 
-		assertEquals(105, cost);
+		assertEquals(catalogItem, foundCatalogItem);
 	}
 
 	@Test
-	public void findCostWithPst() {
-		Catalog catalog = new Catalog(Taxes.withGstAndPst(5, 10));
-		catalog.add("123", 10000, false);
+	public void itemNotFound() {
+		Catalog catalog = new Catalog(Collections.<String, CatalogItem> emptyMap());
 
-		int cost = catalog.findCostFor("123");
+		assertFalse("How could you find something in the empty catalog?!", catalog.contains("123"));
+	}
 
-		assertEquals(11550, cost);
+	@Test
+	public void containItem() {
+		Catalog catalog = Catalog.with("123", 0);
+
+		assertTrue("Item should be in catalog", catalog.contains("123"));
 	}
 }
