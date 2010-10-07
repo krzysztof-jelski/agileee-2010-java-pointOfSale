@@ -14,7 +14,7 @@ public class Catalog {
 		return catalogAsMap.containsKey(code);
 	}
 
-	public String getPrice(String code) {
+	public String getPriceAsString(String code) {
 		return catalogAsMap.get(code);
 	}
 
@@ -26,6 +26,10 @@ public class Catalog {
 		Catalog catalog = new Catalog();
 		catalog.add(code, priceAsString);
 		return catalog;
+	}
+
+	public CatalogItem findItem(String code) {
+		return new CatalogItem(getPriceAsString(code));
 	}
 
 }
