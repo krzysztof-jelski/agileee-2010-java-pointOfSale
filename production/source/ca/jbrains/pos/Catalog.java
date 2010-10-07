@@ -4,22 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Catalog {
-	private final Map<String, String> catalogAsMap;
+	private Map<String, CatalogItem> itemsByCode;
 
 	public Catalog() {
-		this.catalogAsMap = new HashMap<String, String>();
+		this.itemsByCode = new HashMap<String, CatalogItem>();
 	}
 
 	public boolean priceExists(String code) {
-		return catalogAsMap.containsKey(code);
-	}
-
-	public String getPriceAsString(String code) {
-		return catalogAsMap.get(code);
+		return itemsByCode.containsKey(code);
 	}
 
 	private void add(String code, String price) {
-		catalogAsMap.put(code, price);
+		itemsByCode.put(code, new CatalogItem(price));
 	}
 
 	public static Catalog with(String code, String priceAsString) {
@@ -29,7 +25,7 @@ public class Catalog {
 	}
 
 	public CatalogItem findItem(String code) {
-		return new CatalogItem(getPriceAsString(code));
+		return itemsByCode.get(code);
 	}
 
 }
