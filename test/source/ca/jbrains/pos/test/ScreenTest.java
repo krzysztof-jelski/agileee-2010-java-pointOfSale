@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import ca.jbrains.pos.Display;
 import ca.jbrains.pos.Screen;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -18,7 +19,7 @@ public class ScreenTest {
 
 	@Test
 	public void displayNoProductFound() {
-		Screen screen = createScreen();
+		Display screen = createScreen();
 
 		screen.displayNoProductFound("123");
 
@@ -27,7 +28,7 @@ public class ScreenTest {
 
 	@Test
 	public void displayScannedEmptyBarcode() {
-		Screen screen = createScreen();
+		Display screen = createScreen();
 
 		screen.displayScannedEmptyBarcode();
 
@@ -36,14 +37,14 @@ public class ScreenTest {
 
 	@Test
 	public void displayPrice() {
-		Screen screen = createScreen();
+		Display screen = createScreen();
 
 		screen.displayPrice(12550);
 
 		verify(printStream).println("$125.50");
 	}
 
-	private Screen createScreen() {
+	private Display createScreen() {
 		return new Screen(printStream);
 	}
 
