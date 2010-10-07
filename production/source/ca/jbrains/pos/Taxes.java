@@ -15,11 +15,15 @@ public class Taxes {
 	}
 
 	int gstTax(int price) {
-		return price / 100 * gst;
+		return percent(price, gst);
 	}
 
 	public int pstTax(int price) {
-		return price / 100 * pst;
+		return percent(price, pst);
+	}
+
+	private int percent(int price, int percent) {
+		return price / 100 * percent;
 	}
 
 }
