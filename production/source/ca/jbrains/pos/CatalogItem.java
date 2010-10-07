@@ -6,10 +6,6 @@ public class CatalogItem {
 	final boolean pstExempt;
 	public final String barcode;
 
-	public CatalogItem(int price, boolean pstExempt) {
-		this(null, price, pstExempt);
-	}
-
 	public CatalogItem(String barcode, int price, boolean pstExempt) {
 		this.barcode = barcode;
 		this.price = price;
