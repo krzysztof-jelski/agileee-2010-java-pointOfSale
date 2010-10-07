@@ -5,15 +5,20 @@ import static org.mockito.Mockito.*;
 import java.io.PrintStream;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import ca.jbrains.pos.Screen;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ScreenTest {
+	@Mock
+	PrintStream printStream;
 
 	@Test
 	public void displayNoProductFound() {
-		PrintStream printStream = mock(PrintStream.class);
-		Screen screen = new Screen(printStream);
+		Screen screen = createScreen();
 
 		screen.displayNoProductFound("123");
 
@@ -22,8 +27,7 @@ public class ScreenTest {
 
 	@Test
 	public void displayScannedEmptyBarcode() {
-		PrintStream printStream = mock(PrintStream.class);
-		Screen screen = new Screen(printStream);
+		Screen screen = createScreen();
 
 		screen.displayScannedEmptyBarcode();
 
@@ -32,11 +36,15 @@ public class ScreenTest {
 
 	@Test
 	public void displayPrice() {
-		PrintStream printStream = mock(PrintStream.class);
-		Screen screen = new Screen(printStream);
+		Screen screen = createScreen();
 
 		screen.displayPrice("$125.50");
 
 		verify(printStream).println("$125.50");
 	}
+
+	private Screen createScreen() {
+		return new Screen(printStream);
+	}
+
 }
